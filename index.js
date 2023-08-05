@@ -23,12 +23,21 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     const usersDataCollection = client.db("hkdb").collection("userdata");
+    const sectorDataCollecion = client.db("hkdb").collection("selectdata");
 
+    /** Sector Data Get Api */
+    app.get("/sectordata", async (req, res) => {
+      const result = await sectorDataCollecion.find().toArray();
+      res.send(result);
+    });
+
+    /** User Enterd Data Get Api */
     app.get("/userdata", async (req, res) => {
       const result = await usersDataCollection.find().toArray();
       res.send(result);
     });
 
+    /** User Enterd Data Save Api */
     app.post("/userdata", async (req, res) => {
       const data = req.body;
       const existData = await usersDataCollection.findOne(data);
