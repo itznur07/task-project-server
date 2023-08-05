@@ -47,6 +47,25 @@ async function run() {
       }
     });
 
+    /** Edit Enterd Data */
+    app.put("/userdata/:id", async (req, res) => {
+      const id = req.params.id;
+      const data = req.body;
+      const query = { _id: new ObjectId(id) };
+
+      try {
+        const result = await usersDataCollection.updateOne(
+          query,
+          { $set: data }, // Use $set to update the specified fields in the data object
+          { returnOriginal: false } // Set returnOriginal to false to return the updated data
+        );
+        res.send(result);
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "An error occurred" });
+      }
+    });
+
     /** User Enterd Data Delete Api */
     app.delete("/userdata/:id", async (req, res) => {
       const id = req.params.id;
