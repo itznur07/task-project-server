@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const port = process.env.PORT || 3000;
 const cors = require("cors");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 require("dotenv").config();
 
 /** Middlewares */
@@ -45,6 +45,14 @@ async function run() {
         const result = await usersDataCollection.insertOne(data);
         res.send(result);
       }
+    });
+
+    /** User Enterd Data Delete Api */
+    app.delete("/userdata/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await usersDataCollection.deleteOne(query);
+      res.send(result);
     });
 
     // Send a ping to confirm a successful connection
